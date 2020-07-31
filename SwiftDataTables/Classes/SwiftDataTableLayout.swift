@@ -42,7 +42,7 @@ class SwiftDataTableLayout: UICollectionViewFlowLayout {
         guard self.cache.isEmpty else {
             return
         }
-        let date = Date()
+//        let date = Date()
         self.dataTable.calculateColumnWidths()
         var xOffsets = [CGFloat]()
         var yOffsets = [CGFloat]()
@@ -83,8 +83,8 @@ class SwiftDataTableLayout: UICollectionViewFlowLayout {
             }
         }
         self.calculateScrollBarIndicators()
-        let timeLapsed = Date().timeIntervalSince(date)
-        debugPrint("\ntime lapsed: \(timeLapsed)\nfor \(self.cache.count) rows\n")
+//        let timeLapsed = Date().timeIntervalSince(date)
+//        debugPrint("\ntime lapsed: \(timeLapsed)\nfor \(self.cache.count) rows\n")
     }
     
     fileprivate func heightOfFooter() -> CGFloat {

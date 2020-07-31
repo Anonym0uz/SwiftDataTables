@@ -41,6 +41,14 @@ public protocol SwiftDataTableDataSource: class {
     ///   - columnIndex: The column index of the header title at a specific column index
     /// - Returns: the title of the column header.
     func dataTable(_ dataTable: SwiftDataTable, headerTitleForColumnAt columnIndex: NSInteger) -> String
+
+    /// The footer title for the column position to be displayed
+    ///
+    /// - Parameters:
+    ///   - dataTable: SwiftDataTable
+    ///   - columnIndex: The column index of the footer title at a specific column index
+    /// - Returns: the title of the column headfooterer.
+    func dataTable(_ dataTable: SwiftDataTable, footerTitleForColumnAt columnIndex: NSInteger) -> String
 }
 
 /// An optional delegate for further customisation. Default values will be used retrieved from the SwiftDataTableConfiguration file. This will can be overridden and passed into the SwiftDataTable constructor incase you wish not to use the delegate.

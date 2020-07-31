@@ -81,6 +81,10 @@ extension DataTableWithDataSourceViewController {
     }
 }
 extension DataTableWithDataSourceViewController: SwiftDataTableDataSource {
+    public func dataTable(_ dataTable: SwiftDataTable, footerTitleForColumnAt columnIndex: NSInteger) -> String {
+        return self.headerTitles[columnIndex]
+    }
+    
     public func dataTable(_ dataTable: SwiftDataTable, headerTitleForColumnAt columnIndex: NSInteger) -> String {
         return self.headerTitles[columnIndex]
     }

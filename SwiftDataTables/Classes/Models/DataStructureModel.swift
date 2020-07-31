@@ -29,18 +29,18 @@ public struct DataStructureModel {
     
     //MARK: - Lifecycle
     init() {
-        self.init(data: DataTableContent(), headerTitles: [String]())
+        self.init(data: DataTableContent(), headerTitles: [], footerTitles: [])
     }
     
     init(
-        data: DataTableContent, headerTitles: [String],
-        shouldMakeTitlesFitInColumn: Bool = true,
-        shouldDisplayFooterHeaders: Bool = true
+        data: DataTableContent, headerTitles: [String], footerTitles: [String],
+        shouldMakeTitlesFitInColumn: Bool = true
         //sortableColumns: [Int] // This will map onto which column can be sortable
         ) {
         
         
         self.headerTitles = headerTitles
+        self.footerTitles = footerTitles
         let unfilteredData = data
         let sanitisedData = unfilteredData.filter({ currentRowData in
             //Trim column count for current row to the number of headers present
@@ -52,7 +52,7 @@ public struct DataStructureModel {
         self.shouldFitTitles = shouldMakeTitlesFitInColumn
         self.columnAverageContentLength = self.processColumnDataAverages(data: self.data)
         
-        if shouldDisplayFooterHeaders {
+        if footerTitles.isEmpty {
             self.footerTitles = headerTitles
         }
     }

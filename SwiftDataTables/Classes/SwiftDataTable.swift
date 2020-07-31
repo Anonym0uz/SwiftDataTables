@@ -221,8 +221,8 @@ public class SwiftDataTable: UIView {
         collectionView.register(DataCell.self, forCellWithReuseIdentifier: String(describing: DataCell.self))
     }
     
-    func set(data: DataTableContent, headerTitles: [String], options: DataTableConfiguration? = nil, shouldReplaceLayout: Bool = false){
-        self.dataStructure = DataStructureModel(data: data, headerTitles: headerTitles)
+    func set(data: DataTableContent, headerTitles: [String], footerTitles: [String] = [], options: DataTableConfiguration? = nil, shouldReplaceLayout: Bool = false){
+        self.dataStructure = DataStructureModel(data: data, headerTitles: headerTitles, footerTitles: footerTitles)
         self.createDataCellViewModels(with: self.dataStructure)
         self.applyOptions(options)
         if(shouldReplaceLayout){
@@ -284,6 +284,7 @@ public class SwiftDataTable: UIView {
     public func reload(){
         var data = DataTableContent()
         var headerTitles = [String]()
+        var footerTitles = [String]()
         
         let numberOfColumns = dataSource?.numberOfColumns(in: self) ?? 0
         let numberOfRows = dataSource?.numberOfRows(in: self) ?? 0
@@ -293,6 +294,12 @@ public class SwiftDataTable: UIView {
                 return
             }
             headerTitles.append(headerTitle)
+            
+            guard let footerTitle = dataSource?.dataTable(self, footerTitleForColumnAt: columnIndex) else {
+                return
+            }
+            footerTitles.append(footerTitle)
+
         }
         
         for index in 0..<numberOfRows {
@@ -303,7 +310,7 @@ public class SwiftDataTable: UIView {
         }
         self.layout?.clearLayoutCache()
         self.collectionView.resetScrollPositionToTop()
-        self.set(data: data, headerTitles: headerTitles, options: self.options)
+        self.set(data: data, headerTitles: headerTitles, footerTitles: footerTitles, options: self.options)
         self.collectionView.reloadData()
     }
     
@@ -348,18 +355,6 @@ public extension SwiftDataTable {
         self.menuLengthViewModel = MenuLengthHeaderViewModel()
         //        self.bindViewToModels()
     }
-    
-    //    //MARK: - Events
-    //    private func bindViewToModels(){
-    //        self.menuLengthViewModel.searchTextFieldDidChangeEvent = { [weak self] text in
-    //            self?.searchTextEntryDidChange(text)
-    //        }
-    //    }
-    //
-    //    private func searchTextEntryDidChange(_ text: String){
-    //        //call delegate function
-    //        self.executeSearch(text)
-    //    }
 }
 
 
@@ -372,12 +367,7 @@ extension SwiftDataTable: UICollectionViewDataSource, UICollectionViewDelegate {
         return self.dataStructure.columnCount
     }
     
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        //if let dataSource = self.dataSource {
-        //    return dataSource.numberOfRows(in: self)
-        //}
-        return self.numberOfRows()
-    }
+    public func numberOfSections(in collectionView: UICollectionView) -> Int { numberOfRows() }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cellViewModel: DataCellViewModel
@@ -589,6 +579,7 @@ extension SwiftDataTable {
     func numberOfRows() -> Int {
         return self.currentRowViewModels.count
     }
+    
     func heightForRow(index: Int) -> CGFloat {
         return self.delegate?.dataTable?(self, heightForRowAt: index) ?? 44
     }
